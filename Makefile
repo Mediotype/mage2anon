@@ -1,0 +1,6 @@
+build:
+	go get -u github.com/shuLhan/go-bindata/...
+	$$GOPATH/bin/go-bindata -pkg mage2anon -o src/bindata.go etc/*
+	go get ./...
+	go test $$GOPATH/src/github.com/jkenneydaniel/mage2anon/src
+	go build -o mage2anon main.go
