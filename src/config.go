@@ -24,6 +24,7 @@ type Config struct {
 	MysqlPass	string
 	MysqlPort	string
 	MysqlDb		string
+	MysqlTables	string
 	MysqlData	string
 }
 
