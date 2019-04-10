@@ -6,15 +6,25 @@ import (
 	"io/ioutil"
 )
 
+type TableConfig struct {
+	Name string `yaml:"name"`
+	Columns map[string]string `yaml:"columns"`
+}
+
+type EavConfig struct {
+	Name string `yaml:"name"`
+	Attributes map[string]string `yaml:"attributes"`
+}
+
 type Config struct {
-	Tables []struct {
-		Name string `yaml:"name"`
-		Columns map[string]string `yaml:"columns"`
-	}
-	Eav []struct {
-		Name string `yaml:"name"`
-		Attributes map[string]string `yaml:"attributes"`
-	}
+	Tables		[]TableConfig
+	Eav 		[]EavConfig
+	MysqlHost	string
+	MysqlUser	string
+	MysqlPass	string
+	MysqlPort	string
+	MysqlDb		string
+	MysqlData	string
 }
 
 func NewConfig(requested string) (*Config, error) {
@@ -46,13 +56,13 @@ func NewConfig(requested string) (*Config, error) {
 
 func (c Config) ProcessTable(t string) string {
 	for _, table := range c.Tables {
-		if (table.Name == t) {
+		if table.Name == t {
 			return "table"
 		}
 	}
 
 	for _, e := range c.Eav {
-		if (e.Name == t) {
+		if e.Name == t {
 			return "eav"
 		}
 	}
@@ -62,7 +72,7 @@ func (c Config) ProcessTable(t string) string {
 
 func (c Config) ProcessColumn(t string, col string) (bool, string) {
 	for _, table := range c.Tables {
-		if (table.Name != t) {
+		if table.Name != t {
 			continue
 		}
 
