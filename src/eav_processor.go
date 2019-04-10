@@ -1,9 +1,9 @@
 package mage2anon
 
 import (
+	"fmt"
 	"github.com/xwb1989/sqlparser"
 	"strings"
-	"fmt"
 )
 
 type AttributeDefinition struct {

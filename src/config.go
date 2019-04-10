@@ -25,7 +25,6 @@ type Config struct {
 	MysqlPort	string
 	MysqlDb		string
 	MysqlTables	string
-	MysqlData	string
 }
 
 func NewConfig(requested string) (*Config, error) {

@@ -2,14 +2,15 @@ package main
 
 import (
 	"bufio"
+	"compress/gzip"
 	"flag"
 	"fmt"
 	"github.com/jkenneydaniel/mage2anon/src"
 	"io/ioutil"
 	"log"
 	"os"
+	"path"
 	"time"
-	"compress/gzip"
 )
 
 func main() {
@@ -40,7 +41,7 @@ func main() {
 
 	currentTime := time.Now().Local()
 	dumpFilenameFormat := fmt.Sprintf("%s-" + currentTime.Format("2006-01-01") + ".sql", *mysqlDb)
-	tmpDumpLocation := "/tmp/" + dumpFilenameFormat
+	tmpDumpLocation := "/tmp"
 
 	// Define our MySQL config into the config variable (so it is not stored on FS)
 	config.MysqlHost = *mysqlHost
@@ -50,20 +51,20 @@ func main() {
 	config.MysqlTables = *mysqlTables
 	config.MysqlDb = *mysqlDb
 
-	CreateDump(tmpDumpLocation, dumpFilenameFormat)
-
 	cwd, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 
+	mage2anon.PerformDump(config, tmpDumpLocation, dumpFilenameFormat)
+
 	provider := mage2anon.NewProvider()
 	eavProcessor := mage2anon.ProcessEav(config, provider)
 	tableProcessor := mage2anon.ProcessTable(config, provider)
-	tmpFile, err := os.Open(tmpDumpLocation)
-	newFile, err := os.Create(cwd + "/" + dumpFilenameFormat)
-	newCompressedFile, err := os.Create(cwd + "/" + dumpFilenameFormat + ".gz")
-	reader := bufio.NewReader(tmpFile)
+	tmpFile, err := os.Open(path.Join(tmpDumpLocation, dumpFilenameFormat))
+	newFile, err := os.Create(path.Join(cwd, dumpFilenameFormat))
+	newCompressedFile, err := os.Create(path.Join(cwd, dumpFilenameFormat) + ".gz")
+	tmpReader := bufio.NewReader(tmpFile)
 	writer := bufio.NewWriter(newFile)
 	gzipWriter := gzip.NewWriter(newCompressedFile)
 
@@ -73,7 +74,7 @@ func main() {
 	log.SetOutput(ioutil.Discard)
 
 	for {
-		text, err := reader.ReadString('\n')
+		text, err := tmpReader.ReadString('\n')
 
 		eavProcessor.ProcessEav(text)
 
@@ -83,7 +84,7 @@ func main() {
 	}
 
 	for {
-		text, err := reader.ReadString('\n')
+		text, err := tmpReader.ReadString('\n')
 
 		writer.WriteString(tableProcessor.ProcessTable(text))
 		gzipWriter.Write([]byte(tableProcessor.ProcessTable(text)))
