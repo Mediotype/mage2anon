@@ -86,8 +86,10 @@ func main() {
 	for {
 		text, err := tmpReader.ReadString('\n')
 
-		writer.WriteString(tableProcessor.ProcessTable(text))
-		gzipWriter.Write([]byte(tableProcessor.ProcessTable(text)))
+		sqlString := tableProcessor.ProcessTable(text)
+
+		writer.WriteString(sqlString)
+		gzipWriter.Write([]byte(sqlString))
 
 		if err != nil {
 			break

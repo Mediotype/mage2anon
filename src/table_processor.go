@@ -57,13 +57,14 @@ func (p LineProcessor) ProcessTable(s string) string {
 			for _, vt := range rows {
 				for i, e := range vt {
 					column := stmt.Columns[i].String()
+					fmt.Println("123")
 					if column == "attribute_id" {
 						switch v := e.(type) {
 						case *sqlparser.SQLVal:
 							switch v.Type {
 							default:
-								fmt.Println(attributeMapping.GetAttributeCodeById(attributeId))
 								attributeId = string(v.Val)
+								fmt.Println(attributeMapping.GetAttributeCodeById(attributeId))
 							}
 						}
 					}

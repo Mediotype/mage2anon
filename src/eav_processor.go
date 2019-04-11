@@ -1,7 +1,6 @@
 package mage2anon
 
 import (
-	"fmt"
 	"github.com/xwb1989/sqlparser"
 	"strings"
 )
@@ -27,7 +26,6 @@ func (am AttributeMapping) GetAttributeCodeById(attributeId string) string {
 }
 
 func (p LineProcessor) ProcessEav(s string) string {
-	fmt.Println(s)
 	i := strings.Index(s, "INSERT")
 	if i != 0 {
 		// We are only processing lines that begin with INSERT
@@ -70,13 +68,10 @@ func (p LineProcessor) ProcessEav(s string) string {
 					}
 				}
 
-				fmt.Println("Adding attribute ID " + attributeId + " and code " + attributeCode + " to array")
 				attributeMapping.Attributes = append(attributeMapping.Attributes, AttributeDefinition{
 					AttributeId: attributeId,
 					AttributeCode: attributeCode,
 				})
-
-				attributeMapping.GetAttributeCodeById("678")
 			}
 
 			return s
