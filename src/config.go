@@ -40,7 +40,7 @@ func NewConfig(requested string) (*Config, error) {
 
 	switch requested {
 	case "base":
-		source, _ = Asset("etc/config.yml")
+		source, _ = Asset("etc/magento2.yml")
 	default:
 		source, err = ioutil.ReadFile(requested)
 		if err != nil {
@@ -54,7 +54,7 @@ func NewConfig(requested string) (*Config, error) {
 }
 
 
-func (c Config) ProcessTable(t string) string {
+func (c Config) IdentifyTable(t string) string {
 	for _, table := range c.Tables {
 		if table.Name == t {
 			return "table"
@@ -78,6 +78,22 @@ func (c Config) ProcessColumn(t string, col string) (bool, string) {
 
 		for k, v := range table.Columns {
 			if k == col {
+				return true, v
+			}
+		}
+	}
+
+	return false, ""
+}
+
+func (c Config) ProcessAttribute(tableName string, attributeCode string) (bool, string) {
+	for _, attribute := range c.Eav {
+		if attribute.Name != tableName {
+			continue
+		}
+
+		for k, v := range attribute.Attributes {
+			if k == attributeCode {
 				return true, v
 			}
 		}

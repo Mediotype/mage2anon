@@ -51,7 +51,7 @@ tables:
     street: street
     city: city
     region: state
-    region_id: region_od
+    region_id: region_id
     postcode: postcode
     country_id: country_code
     telephone: telephone
@@ -97,3 +97,21 @@ eav:
     firstname: firstname
     lastname: lastname
     taxvat: vat_number
+    email: email
+    fax: telephone
+    telephone: telephone
+- name: customer_address_entity_varchar
+  attributes:
+    firstname: firstname
+    lastname: lastname
+    street: street
+    region_id: region_id
+    vat_id: vat_number
+    region: state
+    telephone: telephone
+    postcode: postcode
+    fax: telephone
+    country_id: country_code
+    company: company
+    city: city
+
