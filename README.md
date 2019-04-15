@@ -31,6 +31,11 @@ mage2anon
         MySQL tables - defaults to nil, useful for small exports
 ```
 
+## License
+Copyright (c) 2019 [Mediotype](https://mediotype.com/).
+
+[OSL 3.0](LICENSE.txt)
+
 ## Acknowledgements
 
 This tool is based on the work done by Max Chadwick and his `dbanon` tool found [here](https://github.com/mpchadwick/dbanon).
