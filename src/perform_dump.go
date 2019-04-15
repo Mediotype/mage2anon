@@ -1,7 +1,6 @@
 package mage2anon
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -16,6 +15,7 @@ func PerformDump(c *Config, tmpFilePath string) error {
 		"--protocol=tcp",
 		"-P"+c.MysqlPort,
 		"-h"+c.MysqlHost,
+		"-u"+c.MysqlUser,
 		"-p"+c.MysqlPass,
 		c.MysqlDb,
 	}
@@ -25,7 +25,6 @@ func PerformDump(c *Config, tmpFilePath string) error {
 		DumpCmdArgs = append(DumpCmdArgs, additionalTables...)
 	}
 	DumpCmd := exec.Command("mysqldump", DumpCmdArgs...)
-	fmt.Println(DumpCmd.Args)
 
 	outFile, err := os.OpenFile(tmpFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
